@@ -689,8 +689,15 @@ And this is the "cheat sheet"..
 
 ### Thank you!
 
+<br />
 
 * https://about.me/stefanop
 * https://github.com/palutz
 * https://twitter.com/palutz
 
+<br />
+
+
+<br />
+
+> Made with [FsReveal](http://fsprojects.github.io/FsReveal/index.html)
