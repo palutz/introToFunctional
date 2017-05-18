@@ -1,0 +1,809 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>What the FUNctional ??!?!!</title>
+    <meta name="description" content="Introduction to Functional Programming">
+    <meta name="author" content="Stefano Paluello">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="//code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="//code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/league.css" id="theme">
+    <link type="text/css" rel="stylesheet" href="fsharp.formatting/styles/style.css" />
+    <link type="text/css" rel="stylesheet" href="fsharp.formatting/styles/deedle.css" />
+    <link type="text/css" rel="stylesheet" href="css/custom.css" />
+    <script src="fsharp.formatting/styles/tips.js" type="text/javascript"></script>
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <link rel="stylesheet" href="css/fsreveal.css">
+    <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+    <script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+    </script>
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+    <script language="javascript" type="text/javascript">
+        function init()
+        {
+            websocket = new WebSocket("ws://"+window.location.host+"/websocket");
+            websocket.onmessage = function(evt) { location.reload(); };
+        }
+        window.addEventListener("load", init, false);
+    </script>
+</head>
+<body>
+    <div class="reveal">
+        <div class="tip" id="fs1">type &#39;T array = &#39;T []<br /><br />Full name: Microsoft.FSharp.Core.array&lt;_&gt;</div>
+<div class="tip" id="fs2">val typeof&lt;&#39;T&gt; : System.Type<br /><br />Full name: Microsoft.FSharp.Core.Operators.typeof</div>
+<div class="tip" id="fs3">val log : value:&#39;T -&gt; &#39;T (requires member Log)<br /><br />Full name: Microsoft.FSharp.Core.Operators.log</div>
+
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section >
+<h1>WTF??!</h1>
+<p>( <strong>W</strong>hat <strong>T</strong>he <strong>F</strong>UNctional ??! )</p>
+<br />
+<p>Intro to Functional Programming</p>
+<p><br />
+<br />
+Stefano Paluello  <a href="http://www.twitter.com/palutz">@palutz</a></p>
+</section>
+<section >
+<section >
+<h3>Learn <strong>functional</strong> the "hard" way</h3>
+<p><em>(High level, abstract, agenda)</em></p>
+<br />
+<ul>
+<li>Hard =&gt; no watered-down version</li>
+<li>( <em>Fast paced</em> ) Intro of functional programming concepts</li>
+<li>Not focusing on any particular language or implementation</li>
+<li>Examples in pseudo-code (javacript-like)</li>
+</ul>
+<aside class="notes">
+FP has a lot of "small" concepts that I will try to tackle in this presentation<br/>
+All together look a big, but step by step it's much easier<br/>
+</aside>
+</section>
+<section >
+<p>What is Functional Programming?</p>
+<p><img src="images/lambda.png" style="background: transparent; border-style: none;" width=300  /></p>
+</section>
+<section >
+<p><strong>Functional programming</strong> is a declarative programming paradigm that emphasizes the
+<em>evaluation of expressions</em> , rather than execution of commands.</p>
+<p>The expressions in these languages are formed by using functions to combine
+basic values. [Hutton ed. 2002]</p>
+<aside class="notes">
+declarative programming = programming is done with expressions or declarations instead of statements. <br/>
+Declarative = WHAT <br/>
+Imperative = HOW<br/>
+</aside>
+</section>
+<section >
+<h3>Imperative vs Declarative</h3>
+<p>Imperative</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">(<span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">array</span>) <span class="o">=&gt;</span> {
+  <span class="i">var</span> <span class="i">res</span> <span class="o">=</span> [];
+  <span class="k">for</span> (<span class="i">i</span> <span class="o">=</span> <span class="n">0</span>; <span class="i">i</span> <span class="o">&lt;</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="i">array</span><span class="o">.</span><span class="i">length</span>; <span class="i">i</span><span class="o">++</span>) { 
+    <span class="i">res</span>[<span class="i">i</span>] <span class="o">=</span> <span class="i">res</span>[<span class="i">i</span>] <span class="o">*</span> <span class="n">3</span>;
+  }
+}
+</code></pre></td>
+</tr>
+</table>
+<p>Declarative</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">(<span onmouseout="hideTip(event, 'fs1', 3)" onmouseover="showTip(event, 'fs1', 3)" class="i">array</span>) <span class="o">=&gt;</span> <span onmouseout="hideTip(event, 'fs1', 4)" onmouseover="showTip(event, 'fs1', 4)" class="i">array</span><span class="o">.</span><span class="i">map</span>(<span class="i">item</span> <span class="o">=&gt;</span> <span class="i">item</span> <span class="o">*</span> <span class="n">3</span>);
+</code></pre></td>
+</tr>
+</table>
+</section>
+<section >
+<h3>Core concepts</h3>
+<ul>
+<li>Functions as first-class citizen</li>
+<li>Immutability</li>
+<li>Purity</li>
+<li>Referential transparency</li>
+</ul>
+<aside class="notes">
+What are the most important concepts that define functional programming<br/>
+</aside>
+</section>
+<section >
+<p>First class ? Purity? Referen..what ???</p>
+<p><img src="images/confusedTravolta.gif" style="background: transparent; border-style: none;"  /></p>
+<aside class="notes">
+this could be a bit confusing.. so let's dive into...<br/>
+</aside>
+</section>
+<section >
+<h3>Don't worry! It's all about ...</h3>
+</section>
+</section>
+<section >
+<section >
+<br />
+<p><img src="images/makefunctions2.jpg" style="background: transparent; border-style: none;" width=600 /></p>
+</section>
+<section >
+<h2>Functions as first-class citizen</h2>
+<br />
+<ul>
+<li>pass functions as arguments</li>
+<li>return functions as result</li>
+<li>bind functions to a variable (name)</li>
+<li>store functions in data structure</li>
+<li>support <em>function literals</em> (aka, anonymous functions)</li>
+<li>strive to use <strong>pure</strong> functions</li>
+</ul>
+<br />
+</section>
+<section >
+<h2>A bit of FP jargon</h2>
+<br />
+<ul>
+<li>
+<p><strong>HOF (High order functions)</strong></p>
+<ul>
+<li>Functions that take other functions as arguments or returns them as results</li>
+</ul>
+</li>
+<li>
+<p><strong>Pure functions</strong></p>
+<ul>
+<li>function result depends only on the input received</li>
+<li><p>function does not cause any (observable) <strong>side effects</strong></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section >
+<h3>"First-class" examples</h3>
+<p>(Using Javascript as pseudo-language)</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// binding a function to a variable</span>
+<span class="i">var</span> <span class="i">hello</span> <span class="o">=</span> <span class="k">function</span>(<span class="i">name</span>) {
+  <span class="k">return</span> <span class="s">&quot;Hello &quot;</span> <span class="o">+</span> <span class="i">name</span>;
+};
+<span onmouseout="hideTip(event, 'fs2', 5)" onmouseover="showTip(event, 'fs2', 5)" class="i">typeof</span>(<span class="i">hello</span>) <span class="c">// function  &lt;--- !!!</span>
+</code></pre></td>
+</tr>
+</table>
+<aside class="notes">
+binding = attach a name to a function (function itself is independent of the name)<br/>
+</aside>
+</section>
+<section >
+<h3>"First-class" examples</h3>
+<p>(High Order functions)</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// Example of HOF in Javascript:</span>
+<span class="i">var</span> <span class="i">doSomeStuffHOF</span> <span class="o">=</span> <span class="k">function</span>(<span class="i">callback</span>) {
+    <span class="c">// ... </span>
+    <span class="k">return</span> <span class="i">anotherHOF</span>(<span class="i">callback</span>);
+}
+<span class="c">// ex2: filter is a HOF ...</span>
+<span class="k">function</span> <span class="i">isAdult</span>(<span class="i">person</span>) {
+   <span class="k">return</span> <span class="i">person</span><span class="o">.</span><span class="i">Age</span> <span class="o">&gt;</span><span class="o">=</span> <span class="n">18</span>;
+}
+<span class="i">var</span> <span class="i">adults</span> <span class="o">=</span> <span class="i">contacts</span><span class="o">.</span><span class="i">filter</span>(<span class="i">isAdult</span>);
+<span class="c">// ex3: receiving and returning a function...</span>
+<span class="i">var</span> <span class="i">f1</span> <span class="o">=</span> <span class="k">function</span>(<span class="i">h2</span>) { <span class="c">// ...</span>
+  <span class="k">function</span> <span class="i">inner</span>() {<span class="c">// ...  };</span>
+  <span class="k">return</span> <span class="i">inner</span>;
+};
+<span class="i">var</span> <span class="i">aHOF</span> <span class="o">=</span> <span class="i">f1</span>(<span class="k">function</span>() { <span class="o">..</span><span class="o">.</span> });   <span class="c">// typeof(aHOF) -&gt; function</span>
+<span class="i">aHOF</span>(); <span class="c">// actual call... </span>
+</code></pre></td>
+</tr>
+</table>
+<aside class="notes">
+ most of the functions in JS accept a callback function as input parameter<br/>
+ Example 2 is a bit more elaborate: we define a function and then we used as a predicate for a filter function<br/>
+ Example 3 just returning an inner function<br/>
+</aside>
+</section>
+<section >
+<h3>"First-class" examples</h3>
+<blockquote>
+<p>Anonymous functions (or literals)</p>
+<p>It's a function declared without any named identifier to refer to it.</p>
+</blockquote>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp">(<span class="k">function</span>(<span class="i">msg</span>) {
+  <span class="i">alert</span>(<span class="i">msg</span>);
+})(<span class="o">&#39;</span><span class="i">A</span> <span class="i">simple</span> <span class="i">message&#39;</span>);
+</code></pre></td>
+</tr>
+</table>
+<br />
+</section>
+</section>
+<section >
+<section >
+<h3>Pure functions</h3>
+<p>(or <em>Mathematical functions</em> )</p>
+<br />
+<ul>
+<li>A pure function ALWAYS gives the same result for a given input value</li>
+<li>A pure function depends only on the input provided to produce the result</li>
+<li>A pure function has no (observable) side effects</li>
+</ul>
+<aside class="notes">
+A pure function maps the set of input (domain) to a set of output (range)<br/>
+</aside>
+</section>
+<section >
+<h3>Pure functions</h3>
+<p>A (pure) function maps the <em>domain</em> onto the <em>range</em></p>
+<p><img src="images/pureFunction1.png" style="background: transparent; border-style: none;" width=300  /></p>
+<p>(pure) Function doesn't have any effect on the input value(s)</p>
+</section>
+<section >
+<h3>Side effects</h3>
+<p><img src="images/forbidden.png" style="float: right; background: transparent; border-style: none;" width=300  />
+<br />
+<br /></p>
+<p><strong> x++ </strong></p>
+<p><em>(syntactic sugar for x = x + 1 )</em></p>
+<br />
+<p><em><strong> Why can we do that in FP ??? </strong></em></p>
+<aside class="notes">
+Classic example of no side effects: x++<br/>
+we are changing the value of x<br/>
+math functions don't allow this cause it doesn't exist in math (no way I can find a value x that is also x + 1 at the same time)<br/>
+</aside>
+</section>
+<section >
+<h3>Immutability</h3>
+<p>Immutable data =&gt; Unchanging over time or unable to change</p>
+<p>Don't be so scared: it's already there in almost any language (a string is immutable)</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">const</span> <span class="i">x</span> <span class="o">=</span> <span class="s">&quot;Hello&quot;</span>;
+<span class="i">x</span> <span class="o">=</span> <span class="i">x</span> <span class="o">+</span> <span class="s">&quot;, World!&quot;</span>;   <span class="c">// ERROR - CANNOT CHANGE x</span>
+<span class="i">y</span> <span class="o">=</span> <span class="i">x</span> <span class="o">+</span> <span class="s">&quot;, World!&quot;</span>;   <span class="c">// OK - create a new string with the new value</span>
+<span class="c">// x = &quot;Hello&quot;</span>
+<span class="c">// y = &quot;Hello, World!&quot;</span>
+</code></pre></td>
+</tr>
+</table>
+<aside class="notes">
+Why is immutability important?<br/>
+We need to attach unchanging values to our functions.<br/>
+Value that don't depend on a context<br/>
+Values are easier to share<br/>
+safer and easier to do parallel programming<br/>
+</aside>
+</section>
+<section >
+<h3>NO Side effects</h3>
+<br />
+<p>The input (x) is not changed</p>
+<p>We create a new value and maps the output with the input</p>
+<br />
+<h4>y = x + 1</h4>
+<br />
+<aside class="notes">
+For every input we will get always the same output (map)<br/>
+</aside>
+</section>
+<section >
+<h3>Pure not pure?</h3>
+<br />
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">const</span> <span class="i">a</span> <span class="o">=</span> <span class="n">3</span>;
+<span class="i">var</span> <span class="i">y</span> <span class="o">=</span> <span class="k">function</span>(<span class="i">x</span>) {
+    <span class="k">return</span> <span class="i">x</span> <span class="o">*</span> <span class="i">a</span>;
+}
+</code></pre></td>
+</tr>
+</table>
+<br />
+<p>Is the function <em>Y</em> pure?</p>
+<aside class="notes">
+No! The function y is using a value (a) not passed as input<br/>
+</aside>
+</section>
+<section >
+<h3>Pure not pure?</h3>
+<br />
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">const</span> <span class="i">a</span> <span class="o">=</span> <span class="n">3</span>;
+<span class="i">var</span> <span class="i">y</span> <span class="o">=</span> <span class="k">function</span>(<span class="i">x</span>, <span class="i">a</span>) {
+    <span class="k">return</span> <span class="i">x</span> <span class="o">*</span> <span class="i">a</span>;
+}
+</code></pre></td>
+</tr>
+</table>
+<br />
+<p>Is the function <em>Y</em> pure?</p>
+<aside class="notes">
+Yes. Really similar to before but using the a received as parameter<br/>
+</aside>
+</section>
+<section >
+<h3>Pure not pure?</h3>
+<br />
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">function</span>(<span class="i">x</span>) {
+  <span class="i">var</span> <span class="i">a</span> <span class="o">=</span> <span class="i">getValueFromWeb</span>(<span class="o">..</span><span class="o">.</span>);
+  <span class="k">if</span>(<span class="i">a</span> <span class="o">&gt;</span> <span class="n">100</span>)
+    <span class="k">return</span> <span class="i">a</span>;
+  <span class="k">else</span> 
+    <span class="k">return</span> <span class="i">x</span>;
+}
+</code></pre></td>
+</tr>
+</table>
+<br />
+<p>Is the function pure?</p>
+<aside class="notes">
+No! We are dealing with an EXTERNAL service.<br/>
+</aside>
+</section>
+<section >
+<h3>Pure not pure?</h3>
+<br />
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">function</span>(<span class="i">myarray</span>) {
+  <span class="i">myarray</span><span class="o">.</span><span class="i">reverse</span>(); <span class="c">// ... tricky! </span>
+}
+</code></pre></td>
+</tr>
+</table>
+<br />
+<p>Pure or not?</p>
+<aside class="notes">
+No! In JS the reverse function is changing the input<br/>
+</aside>
+</section>
+<section >
+<h3>Pure not pure?</h3>
+<br />
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// log to the console...</span>
+<span class="i">console</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs3', 6)" onmouseover="showTip(event, 'fs3', 6)" class="i">log</span>(<span class="s">&quot;Pure or not pure? That is the question.&quot;</span>);
+</code></pre></td>
+</tr>
+</table>
+<br />
+<p>Pure or not?</p>
+<aside class="notes">
+No! Writing to console is SIDE EFFECT! (observable iteraction with the external world)<br/>
+</aside>
+</section>
+<section >
+<h3>Why pure is so important ?</h3>
+<br />
+<ul>
+<li>Functions are easy to cache</li>
+<li>Functions are easy to port and the code is auto-documenting</li>
+<li>Functions are easy to test</li>
+<li>Functions can be parallelized with (almost) no effort</li>
+<li><strong>Referential transparency</strong> (!!!)</li>
+</ul>
+<aside class="notes">
+cache => returns always the same output for the same input<br/>
+</aside>
+<aside class="notes">
+Pure functions are self contained (easy to port)with EXPLICIT (injected) dependencies.<br/>
+</aside>
+<aside class="notes">
+Pure functions with explicit dependencies => easy to test<br/>
+</aside>
+<aside class="notes">
+No side effects, not sharing anything => No problem to create parallel code<br/>
+</aside>
+</section>
+<section >
+<h3>Pure vs impure</h3>
+<br />
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// impure</span>
+<span class="i">var</span> <span class="i">register</span> <span class="o">=</span> <span class="k">function</span>(<span class="i">formval</span>) {
+  <span class="i">var</span> <span class="i">user</span> <span class="o">=</span> <span class="i">createUser</span>(<span class="i">formVal</span>);
+  <span class="i">greet</span>(<span class="i">user</span>);
+  <span class="c">// ...</span>
+}
+
+<span class="c">// pure - remember anything?</span>
+<span class="i">var</span> <span class="i">register</span> <span class="o">=</span> <span class="k">function</span>(<span class="i">dbSvc</span>, <span class="i">greetSvc</span>, <span class="i">formVal</span>) {
+  <span class="k">return</span> <span class="k">function</span>() {
+    <span class="i">var</span> <span class="i">user</span> <span class="o">=</span> <span class="i">createUser</span>(<span class="i">dbSvc</span>, <span class="i">formVal</span>);
+    <span class="i">greet</span>(<span class="i">greetSvc</span>, <span class="i">user</span>);
+    <span class="c">// ...</span>
+  }
+}
+</code></pre></td>
+</tr>
+</table>
+<aside class="notes">
+ The pure code looks a lot like a proper DI OOP code<br/>
+</aside>
+</section>
+<section >
+<h3>Referential transparency</h3>
+<br />
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">var</span> <span class="i">Add1</span> <span class="o">=</span> <span class="k">function</span>(<span class="i">x</span>) {
+  <span class="k">return</span> <span class="i">x</span> <span class="o">+</span> <span class="n">1</span>;
+}
+<span class="i">var</span> <span class="i">six</span> <span class="o">=</span> <span class="i">Add1</span>(<span class="n">5</span>); 
+<span class="c">// we can always substitute Add1(5) with its own evaluation and viceversa...</span>
+</code></pre></td>
+</tr>
+</table>
+<aside class="notes">
+Pure function allows to substitute the name of the function (the bind between a name and the function itself)<br/>
+with its evaluated value without affecting the behavior of the program.<br/>
+</aside>
+</section>
+<section >
+<h3>Tricky part of math functions</h3>
+<br />
+<ul>
+<li>Input and output values are immutable!</li>
+<li>Math functions always have only one input and one output</li>
+</ul>
+<aside class="notes">
+quite important concepts to remember and sometimes difficult to deal with<br/>
+how do we deal with only one input and pne output<br/>
+</aside>
+</section>
+</section>
+<section >
+<section >
+<h3>Core concepts (2)</h3>
+<br />
+<ul>
+<li>Currying (not the spice)</li>
+<li>Partial application</li>
+<li>Functions composition</li>
+</ul>
+<br />
+</section>
+<section >
+<h3>Currying</h3>
+<br />
+<p>AKA: how to deal with only one input and one output</p>
+<p><em>[Simple mode on]</em></p>
+<blockquote>
+<p>You can call a function with LESS araguments and
+you will get back another functions with the remaining arguments</p>
+</blockquote>
+<p><em>[Simple mode off]</em></p>
+<br />
+<aside class="notes">
+for the one interested the name is taken from Haskell Curry a mathematician<br/>
+who had a big influence, with his work, on functional programming (hence the name of the most popular pure functional language)<br/>
+</aside>
+</section>
+<section >
+<h3>Currying</h3>
+<br />
+<p>(this is more pseudo code than js)</p>
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="k">function</span> <span class="i">add</span> <span class="i">x</span> <span class="i">y</span> <span class="o">=</span> <span class="i">x</span> <span class="o">+</span> <span class="i">y</span>
+
+<span class="i">var</span> <span class="i">add1</span> <span class="o">=</span> <span class="i">add</span> <span class="i">x</span> <span class="o">+</span> <span class="n">1</span>   <span class="c">// function with one parameter</span>
+
+<span class="i">var</span> <span class="i">c</span> <span class="o">=</span> <span class="i">add1</span> <span class="n">2</span>  <span class="c">// c = 3</span>
+</code></pre></td>
+</tr>
+</table>
+</section>
+<section >
+<h3>Partial function application</h3>
+<p>(AKA, currying on steroids)</p>
+<p>Currying works decomposing a function in smaller chunks, one parameter at time.</p>
+<p>Partial application use the same concept, but with more parameters (eg. 3 out of 5)</p>
+<p>You can design library with partial function in mind (ordering the parameter)</p>
+<aside class="notes">
+List.map ... the list is the last parameter<br/>
+put first the parameter more likely to be static and last most changing (eg data structure or collection)<br/>
+this make easier to pipe<br/>
+</aside>
+</section>
+<section >
+<h3>Functions composition</h3>
+<br />
+<p><img src="images/compositefunctions.png" style="background: transparent; border-style: none;" width=600  /></p>
+<br />
+<aside class="notes">
+f * g => it's a functional composition meaning f composed with g, or f after g <br/>
+</aside>
+</section>
+<section >
+<h3>Functions composition</h3>
+<p>Short explanation...</p>
+<br />
+<table class="pre"><tr><td class="lines"><pre class="fssnip"><span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre></td>
+<td class="snippet"><pre class="fssnip highlighted"><code lang="fsharp"><span class="i">f</span> <span class="o">*</span> <span class="i">g</span>   <span class="c">// f composed with g</span>
+
+(<span class="i">f</span> <span class="o">*</span> <span class="i">g</span>)(<span class="i">x</span>)   <span class="c">// or, call f after call g with x</span>
+
+<span class="i">f</span>(<span class="i">g</span>(<span class="i">x</span>))    <span class="c">// other way to write the same thing</span>
+</code></pre></td>
+</tr>
+</table>
+</section>
+</section>
+<section >
+<section >
+<br />
+<p><img src="images/monadsyouneed.jpeg" style="background: transparent; border-style: none;" width=390  /></p>
+<br />
+</section>
+<section >
+<h3>Mondas' hype</h3>
+<br />
+<p>Monads is the most discussed, feared and (in)famous concept behind functional programming.</p>
+<blockquote>
+<p>DISCLAIMER: you don't need to use Monads to start programming in a functional way.</p>
+<p>DISCLAIMER2: understanding them won't hurt you and could be beneficial ;-)</p>
+</blockquote>
+</section>
+<section >
+<p>Never heard about Monads, why hype?</p>
+<br />
+<p><img src="images/Monad-tutorials-chart.png" style="background: transparent; border-style: none;" width=300  /></p>
+<sup><sub>Source: HaskellWiki</sub></sup>
+<br />
+<p>PS: not aiming to be YATAM (Yet Another Tutorial About Monads), just a fast explanation (hopefully)</p>
+</section>
+<section >
+<h3>What is a Monad?</h3>
+<br />
+<blockquote>
+<p>A Monad is just a <strong>monoid</strong> in the category of the <strong>endofunctors</strong></p>
+</blockquote>
+<br />
+</section>
+<section >
+<br />
+<p><img src="images/meme_ehhhh.jpg" style="background: transparent; border-style: none;"  /></p>
+<br />
+</section>
+<section >
+<h3>Making it easier...</h3>
+<p>Let's make some assumptions:</p>
+<ul>
+<li>We all know what is a category (general speaking)</li>
+<li>We don't know monoid, hence we call it <em>x</em></li>
+<li>We don't know endofunctors, hence we call it <em>y</em></li>
+</ul>
+<br />
+</section>
+<section >
+<p>And... What do we get it here?</p>
+<blockquote>
+<p>A Monad is just a <strong>x</strong> in the category of <strong>y</strong></p>
+</blockquote>
+<p><img src="images/xintoy.png" style="background: transparent; border-style: none;" width=300  /></p>
+<blockquote>
+<p>Think about Monad as a "container"</p>
+</blockquote>
+</section>
+<section >
+<h3>Category theory</h3>
+<p>Let's not even start:</p>
+<blockquote>
+<p>Monoid, Functors, Applicatives, Monads...</p>
+</blockquote>
+<p>And this is the "cheat sheet"..</p>
+<p><img src="images/categoryTheoryCheatSheet.png" style="border-style: none;" width=600 /></p>
+<p>Source: HaskellWiki (again...)</p>
+<br />
+<aside class="notes">
+Category Theory : abstract math to study relationship between objects<br/>
+Category: it's a math concept to study relationship<br/>
+Monoid: a category of only one object (eg: multiplication. All Numbers as relationship between the World and itself<br/>
+Functor: value "boxed" in a context and we want to apply a function f returning a value v2 to the simple value (eg: map )<br/>
+Applicatives: like functors but also the function f to apply is boxed<br/>
+Monad: take a wrapped value, a function f returning a wrapped v2, works together<br/>
+</aside>
+</section>
+</section>
+<section >
+<section >
+<h3>Most (in)famous Monads</h3>
+<br />
+<ul>
+<li><strong>Writer</strong> Monad</li>
+<li><strong>Reader</strong> Monad</li>
+<li><strong>State</strong> Monad</li>
+</ul>
+<br />
+</section>
+<section >
+<h3>Writer Monad</h3>
+<br />
+<ul>
+<li>Bind a value in the Monad</li>
+<li>Manage alongside a writer (usually a log)</li>
+<li>Compose all your operations</li>
+<li>get the results and the log</li>
+</ul>
+<p><img src="images/monadWriter.png" style="background: transparent; border-style: none;" /></p>
+</section>
+<section >
+<h3>Reader Monad</h3>
+<br />
+<ul>
+<li>Particular monad: bind only one value</li>
+<li>add functions to the monad and then apply to a state</li>
+<li>workflow: get the f out of the Reader, pass in the state s, apply f to s =&gt; Reader2</li>
+<li>get the function from Reader2, run it (pass a State), get the new value out</li>
+</ul>
+<p><img src="images/monadReader.png" style="background: transparent; border-style: none;" /></p>
+</section>
+<section >
+<h3>State Monad</h3>
+<ul>
+<li>it's a ReadWrite Reader Monad</li>
+<li>get State with <em>get</em> , change State with <em>put</em></li>
+<li>workflow: run to get the function f, apply f to State s</li>
+<li>... : get back the State Monad =&gt; ([result of f], modified State)</li>
+</ul>
+<p><img src="images/monadState.png" style="background: transparent; border-style: none;" /></p>
+</section>
+<section >
+<p><img src="images/jointhedarkside.png" style="background: transparent; border-style: none;" /></p>
+<br />
+</section>
+</section>
+<section >
+<h3>Thank you!</h3>
+<br />
+<ul>
+<li><a href="https://about.me/stefanop">https://about.me/stefanop</a></li>
+<li><a href="https://github.com/palutz">https://github.com/palutz</a></li>
+<li><a href="https://twitter.com/palutz">https://twitter.com/palutz</a></li>
+</ul>
+<br />
+<br />
+<blockquote>
+<p>Made with <a href="http://fsprojects.github.io/FsReveal/index.html">FsReveal</a></p>
+</blockquote>
+</section>
+
+
+        </div>
+    </div>
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+    <script>
+        // Add the nohighlight class and data-noescape attribute to code elements that have already been formatted by FSharp.Formatting
+        $('pre.highlighted code').addClass('nohighlight').attr('data-noescape', '');
+
+        // Full list of configuration options available here:
+        // https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'convex', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Parallax scrolling
+            // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+            // parallaxBackgroundSize: '2100px 900px',
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: 'lib/js/classList.js', condition: function () { return !document.body.classList; } },
+                { src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+                { src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+                { src: 'plugin/zoom-js/zoom.js', async: true, condition: function () { return !!document.body.classList; } },
+                { src: 'plugin/notes/notes.js', async: true, condition: function () { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+</body>
+</html>
+
