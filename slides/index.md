@@ -231,7 +231,7 @@ _(syntactic sugar for x = x + 1 )_
 
 <br />
 
-_** Why can we do that in FP ??? **_
+_** Why can't we do that in FP ??? **_
 
 ' Classic example of no side effects: x++
 ' we are changing the value of x
